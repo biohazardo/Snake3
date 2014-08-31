@@ -20,7 +20,7 @@ public class Game extends Activity {
 
     @Override
     public void update(long delta) {
-
+        snake.update(delta);
     }
 
     @Override

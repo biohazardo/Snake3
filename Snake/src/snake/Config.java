@@ -8,4 +8,5 @@ public class Config {
     public static int FIELD_HEIGHT = 100;
 
     public static int CELL_SIZE = 5;
+    public static int SNAKE_SPEED = 3;
 }

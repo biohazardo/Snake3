@@ -30,6 +30,7 @@ public class Engine {
         if (activity == null) {
             return;
         }
+        activity.update(delta);
     }
 
     public void draw() {
@@ -60,6 +61,7 @@ public class Engine {
             while (isRunning) {
                 delta = System.currentTimeMillis() - lastTime;
                 lastTime = System.currentTimeMillis();
+
                 engine.update(delta);
                 engine.draw();
             }
