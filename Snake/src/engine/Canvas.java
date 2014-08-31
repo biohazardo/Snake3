@@ -10,8 +10,8 @@ import java.awt.image.BufferStrategy;
  */
 public class Canvas extends java.awt.Canvas {
     protected Graphics graphics;
-    public Canvas() {
-        setPreferredSize(new Dimension(Game.WIDTH, Game.HEIGHT));
+    public Canvas(Dimension dimension) {
+        setPreferredSize(dimension);
     }
 
     public Graphics startRender() {

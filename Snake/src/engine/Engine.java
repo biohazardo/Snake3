@@ -9,9 +9,10 @@ public class Engine {
     protected Window window;
     protected Canvas canvas;
     protected Activity activity;
+    protected Dimension dimension;
 
-    public Engine() {
-        this.window = new Window();
+    public Engine(Dimension dimension) {
+        this.window = new Window(dimension);
         this.canvas = this.window.getCanvas();
     }
 

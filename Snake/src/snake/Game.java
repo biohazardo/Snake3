@@ -2,7 +2,8 @@ package snake;
 
 import engine.Activity;
 import engine.Engine;
-import snake.activity.Blank;
+
+import java.awt.*;
 
 /**
  * Created by User on 31.08.2014.
@@ -16,9 +17,14 @@ public class Game {
     }
 
     public Game() {
-        this.engine = new Engine();
-        Activity blank = new Blank();
+        this.engine = new Engine(getCanvasDimension());
+        Activity blank = new snake.activity.Game();
         this.engine.setActivity(blank);
         this.engine.startLoop();
+    }
+
+    public Dimension getCanvasDimension()
+    {
+        return new Dimension(Config.FIELD_WIDTH * Config.CELL_SIZE, Config.FIELD_HEIGHT * Config.CELL_SIZE);
     }
 }
