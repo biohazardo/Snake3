@@ -1,6 +1,8 @@
 package engine;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by User on 31.08.2014.
@@ -10,8 +12,15 @@ public class Engine {
     protected Canvas canvas;
     protected Activity activity;
     protected Dimension dimension;
+    private static Engine instance;
+    protected Map<Integer,Boolean> keys = new HashMap<Integer,Boolean>();
+
+    public static Engine gate() {
+        return Engine.instance;
+    }
 
     public Engine(Dimension dimension) {
+        Engine.instance = this;
         this.window = new Window(dimension);
         this.canvas = this.window.getCanvas();
     }
@@ -66,5 +75,17 @@ public class Engine {
                 engine.draw();
             }
         }
+    }
+
+    public void registerKey(Integer key) {
+        this.keys.put(key, true);
+    }
+
+    public void unregisterKey(Integer key) {
+        this.keys.remove(key);
+    }
+
+    public Boolean isKeyPressed(Integer key) {
+        return this.keys.containsKey(key) && this.keys.get(key);
     }
 }

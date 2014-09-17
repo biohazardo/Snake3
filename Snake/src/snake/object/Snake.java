@@ -1,5 +1,6 @@
 package snake.object;
 
+import engine.Engine;
 import snake.Config;
 
 import java.awt.*;
@@ -18,7 +19,7 @@ public class Snake {
     public Snake(Point startPoint) {
         limbs = new ArrayList<Limb>();
         initFirstLimbs(startPoint);
-        direction = 'U';
+        direction = 'D';
         setSpeed(Config.SNAKE_SPEED);
 
         lastStep = System.currentTimeMillis();
@@ -46,8 +47,8 @@ public class Snake {
     }
 
     public void update(long delta) {
-
         this.makeStep(delta);
+        this.changeDirection();
     }
 
     public void makeStep(long delta) {
@@ -59,13 +60,51 @@ public class Snake {
         Limb lastLimb = limbs.remove(limbs.size() - 1);
         Limb firstLimb = limbs.get(0);
         Point firstLimbPosition = firstLimb.getPosition();
-        lastLimb.setPosition(new Point((int)firstLimbPosition.getX(), (int)firstLimbPosition.getY() + 1));
+        if (direction == 'D') {
+            lastLimb.setPosition(new Point((int)firstLimbPosition.getX(), (int)firstLimbPosition.getY() + 1));
+        }
+        switch (direction) {
+            case 'D':
+                lastLimb.setPosition(new Point((int)firstLimbPosition.getX(), (int)firstLimbPosition.getY() + 1));
+                break;
+            case 'U':
+                lastLimb.setPosition(new Point((int)firstLimbPosition.getX(), (int)firstLimbPosition.getY() - 1));
+                break;
+            case 'L':
+                lastLimb.setPosition(new Point((int)firstLimbPosition.getX() - 1, (int)firstLimbPosition.getY()));
+                break;
+            case 'R':
+                lastLimb.setPosition(new Point((int)firstLimbPosition.getX() + 1, (int)firstLimbPosition.getY()));
+                break;
+        }
         limbs.add(0, lastLimb);
 
         lastLimb.setHead(true);
         firstLimb.setHead(false);
 
         lastStep = System.currentTimeMillis();
+    }
+
+    protected void changeDirection()
+    {
+        Engine engine = Engine.gate();
+        Character tempDirection;
+        if (engine.isKeyPressed(37)) {
+            tempDirection = 'L';
+        } else if (engine.isKeyPressed(38)) {
+            tempDirection = 'U';
+        } else if (engine.isKeyPressed(39)) {
+            tempDirection = 'R';
+        } else if (engine.isKeyPressed(40)) {
+            tempDirection = 'D';
+        } else {
+            tempDirection = 'N';
+        }
+        if (tempDirection == 'N' || (tempDirection == 'L' && direction == 'R') || (tempDirection == 'R' && direction == 'L')
+                ||(tempDirection == 'U' && direction == 'D') || (tempDirection == 'D' && direction == 'U')) {
+            return;
+        }
+        direction = tempDirection;
     }
 
     protected class Limb {
