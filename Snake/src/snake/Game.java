@@ -18,8 +18,8 @@ public class Game {
 
     public Game() {
         this.engine = new Engine(getCanvasDimension());
-        Activity blank = new snake.activity.Game();
-        this.engine.setActivity(blank);
+        Activity activity = new snake.activity.Menu();
+        this.engine.setActivity(activity);
         this.engine.startLoop();
     }
 

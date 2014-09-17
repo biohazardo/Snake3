@@ -19,7 +19,7 @@ public class Canvas extends java.awt.Canvas {
 
             @Override
             public void keyTyped(KeyEvent e) {
-                System.out.println("Typed " + e.getKeyChar());
+                System.out.println("Typed " + e.getKeyCode());
             }
 
             @Override

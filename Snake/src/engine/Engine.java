@@ -88,4 +88,8 @@ public class Engine {
     public Boolean isKeyPressed(Integer key) {
         return this.keys.containsKey(key) && this.keys.get(key);
     }
+
+    public Canvas getCanvas(){
+        return this.canvas;
+    }
 }
