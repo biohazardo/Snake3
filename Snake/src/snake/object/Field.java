@@ -38,8 +38,8 @@ public class Field {
         }
         // Создаем еду для змейки
         // Выбираем рандомную точку, проверяем, нет ли там змеи, и создаем фрукт
-        int x = this.generator.nextInt((int)size.getWidth()) + 1;
-        int y = this.generator.nextInt((int)size.getHeight()) + 1;
+        int x = this.generator.nextInt((int)size.getWidth()) ;
+        int y = this.generator.nextInt((int)size.getHeight()) ;
         Fruit fruit = new Fruit(x, y);
         this.fruits.add(fruit);
     }
@@ -55,5 +55,9 @@ public class Field {
 
     public void eatFruit(Fruit fruit) {
         this.fruits.remove(fruit);
+    }
+
+    public boolean outOfBounds(Point position) {
+        return position.getX() < 0 || position.getY() < 0 || position.getX() >= size.getWidth() || position.getY() >= size.getHeight();
     }
 }

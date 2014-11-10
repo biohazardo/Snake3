@@ -46,7 +46,7 @@ public class Game extends Activity {
 
     @Override
     public Dimension getDimension() {
-        return new Dimension(Config.FIELD_WIDTH * Config.CELL_SIZE, Config.FIELD_HEIGHT * Config.CELL_SIZE);
+        return new Dimension(Config.FIELD_WIDTH * Config.CELL_SIZE, Config.FIELD_HEIGHT * Config.CELL_SIZE + Config.INFO_PANEL_HEIGHT);
     }
 
     public void closeGame() {

@@ -18,7 +18,7 @@ public class Fruit {
 
     public void render(Graphics graphics) {
         graphics.setColor(Color.YELLOW);
-        graphics.fillRect(x * Config.CELL_SIZE, y * Config.CELL_SIZE, Config.CELL_SIZE, Config.CELL_SIZE);
+        graphics.fillRect(x * Config.CELL_SIZE, y * Config.CELL_SIZE + Config.INFO_PANEL_HEIGHT, Config.CELL_SIZE, Config.CELL_SIZE);
     }
 
 }

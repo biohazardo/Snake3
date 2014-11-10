@@ -7,6 +7,7 @@ public class Config {
     public static int FIELD_WIDTH = 30;
     public static int FIELD_HEIGHT = 30;
 
+    public static int INFO_PANEL_HEIGHT = 50;
     public static int CELL_SIZE = 10;
     public static int SNAKE_SPEED = 2;
     public static int SPEED_MODIFIER = 5;

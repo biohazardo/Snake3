@@ -16,6 +16,7 @@ public class Snake {
     private int speed;
     private long lastStep;
     private long milliBetweenSteps;
+    private boolean notMovedYet = false;
 
     public Snake(Point startPoint) {
         limbs = new ArrayList<Limb>();
@@ -65,20 +66,20 @@ public class Snake {
 
         Point firstLimbPosition = firstLimb.getPosition();
         if (direction == 'D') {
-            lastLimb.setPosition(new Point((int)firstLimbPosition.getX(), (int)firstLimbPosition.getY() + 1));
+            lastLimb.setPosition(new Point((int) firstLimbPosition.getX(), (int) firstLimbPosition.getY() + 1));
         }
         switch (direction) {
             case 'D':
-                lastLimb.setPosition(new Point((int)firstLimbPosition.getX(), (int)firstLimbPosition.getY() + 1));
+                lastLimb.setPosition(new Point((int) firstLimbPosition.getX(), (int) firstLimbPosition.getY() + 1));
                 break;
             case 'U':
-                lastLimb.setPosition(new Point((int)firstLimbPosition.getX(), (int)firstLimbPosition.getY() - 1));
+                lastLimb.setPosition(new Point((int) firstLimbPosition.getX(), (int) firstLimbPosition.getY() - 1));
                 break;
             case 'L':
-                lastLimb.setPosition(new Point((int)firstLimbPosition.getX() - 1, (int)firstLimbPosition.getY()));
+                lastLimb.setPosition(new Point((int) firstLimbPosition.getX() - 1, (int) firstLimbPosition.getY()));
                 break;
             case 'R':
-                lastLimb.setPosition(new Point((int)firstLimbPosition.getX() + 1, (int)firstLimbPosition.getY()));
+                lastLimb.setPosition(new Point((int) firstLimbPosition.getX() + 1, (int) firstLimbPosition.getY()));
                 break;
         }
         limbs.add(0, lastLimb);
@@ -86,19 +87,27 @@ public class Snake {
         lastLimb.setHead(true);
         firstLimb.setHead(false);
 
+        System.out.println(lastLimb.getPosition().getX() + " " + lastLimb.getPosition().getY());
+
+        if (lastLimb.outOfBounds()) {
+            lastLimb.teleport(direction);
+        }
+
         Game game = (Game) Engine.gate().getActivity();
         Point point = lastLimb.getPosition();
-        Fruit fruit = game.getField().getFruit((int)point.getX(), (int)point.getY());
+        Fruit fruit = game.getField().getFruit((int) point.getX(), (int) point.getY());
         if (fruit != null) {
             game.getField().eatFruit(fruit);
             this.grow(lastLimbOldPosition);
         }
-
+        this.notMovedYet = false;
         lastStep = System.currentTimeMillis();
     }
 
-    protected void changeDirection()
-    {
+    protected void changeDirection() {
+        if (this.notMovedYet == true) {
+            return;
+        }
         Engine engine = Engine.gate();
         Character tempDirection;
         if (engine.isKeyPressed(37)) {
@@ -113,15 +122,23 @@ public class Snake {
             tempDirection = 'N';
         }
         if (tempDirection == 'N' || (tempDirection == 'L' && direction == 'R') || (tempDirection == 'R' && direction == 'L')
-                ||(tempDirection == 'U' && direction == 'D') || (tempDirection == 'D' && direction == 'U')) {
+                || (tempDirection == 'U' && direction == 'D') || (tempDirection == 'D' && direction == 'U')) {
             return;
         }
-        direction = tempDirection;
+        if (direction != tempDirection) {
+            direction = tempDirection;
+            this.notMovedYet = true;
+        }
     }
 
     public void grow(Point position) {
         Limb limb = new Limb(false, position);
         this.limbs.add(limb);
+    }
+
+    public Field getField() {
+        Game game = (Game) Engine.gate().getActivity();
+        return game.getField();
     }
 
     protected class Limb {
@@ -135,7 +152,11 @@ public class Snake {
 
         public void render(Graphics graphics) {
             graphics.setColor(isHead ? Color.WHITE : Color.GREEN);
-            graphics.fillRect((int) position.getX() * Config.CELL_SIZE, (int) position.getY() * Config.CELL_SIZE, Config.CELL_SIZE, Config.CELL_SIZE);
+            graphics.fillRect(
+                    (int) position.getX() * Config.CELL_SIZE,
+                    (int) position.getY() * Config.CELL_SIZE + Config.INFO_PANEL_HEIGHT,
+                    Config.CELL_SIZE,
+                    Config.CELL_SIZE);
         }
 
         public Point getPosition() {
@@ -148,6 +169,29 @@ public class Snake {
 
         public void setHead(boolean value) {
             this.isHead = value;
+        }
+
+        public boolean outOfBounds() {
+
+            return getField().outOfBounds(this.getPosition());
+        }
+
+        public void teleport(Character direction) {
+            switch (direction) {
+                case 'U':
+                    this.position.y = (int) getField().size.getHeight() - 1;
+                    break;
+                case 'D':
+                    this.position.y = 0;
+                    break;
+                case 'L':
+                    this.position.x = (int) getField().size.getWidth() - 1;
+                    break;
+                case 'R':
+                    this.position.x = 0;
+                    break;
+
+            }
         }
 
     }
