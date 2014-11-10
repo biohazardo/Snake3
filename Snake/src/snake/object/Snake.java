@@ -3,6 +3,7 @@ package snake.object;
 import engine.Engine;
 import snake.Config;
 import snake.activity.Game;
+import snake.object.field.BigFruit;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -97,6 +98,11 @@ public class Snake {
         if (fruit != null) {
             game.getField().eatFruit(fruit);
             this.grow(lastLimbOldPosition, 1);
+        }
+        BigFruit bigFruit = game.getField().getBigFruit((int) point.getX(), (int) point.getY());
+        if (bigFruit != null) {
+            game.getField().eatBigFruit(bigFruit);
+            this.grow(lastLimbOldPosition, 3);
         }
         this.notMovedYet = false;
         lastStep = System.currentTimeMillis();
