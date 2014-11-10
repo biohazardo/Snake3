@@ -32,8 +32,13 @@ public class Engine {
     }
 
     public void setActivity(Activity activity) {
+        System.out.println(activity.getDimension().getWidth() + " " + activity.getDimension().getHeight());
+        this.canvas.setPreferredSize(activity.getDimension());
+
+        this.window.pack();
         this.activity = activity;
     }
+    public Activity getActivity() { return this.activity; }
 
     public void update(long delta) {
         if (activity == null) {

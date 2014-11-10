@@ -14,14 +14,16 @@ public class Game {
     }
 
     public Game() {
-        this.engine = new Engine(getCanvasDimension());
         Activity activity = new snake.activity.Menu();
+        // for testing
+//        Activity activity = new snake.activity.Game();
+        this.engine = new Engine(getCanvasDimension(activity));
         this.engine.setActivity(activity);
         this.engine.startLoop();
     }
 
-    public Dimension getCanvasDimension()
+    public Dimension getCanvasDimension(Activity activity)
     {
-        return new Dimension(Config.FIELD_WIDTH * Config.CELL_SIZE, Config.FIELD_HEIGHT * Config.CELL_SIZE);
+        return activity.getDimension();
     }
 }

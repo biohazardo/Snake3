@@ -9,12 +9,13 @@ import java.awt.*;
  */
 abstract public class Activity {
     abstract public void render(Graphics graphics);
+    abstract public Dimension getDimension();
 
     abstract public void update(long delta);
 
     public void clearScreen(Graphics graphics) {
         graphics.setColor(Color.BLACK);
-        graphics.fillRect(0,0, Game.WIDTH, Game.HEIGHT);
+        graphics.fillRect(0,0, (int)getDimension().getWidth(), (int)getDimension().getHeight());
 
     }
 }

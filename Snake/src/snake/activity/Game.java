@@ -1,11 +1,13 @@
 package snake.activity;
 
 import engine.Activity;
+import engine.Engine;
 import snake.Config;
 import snake.object.Field;
 import snake.object.Snake;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 /**
  * Created by User on 31.08.2014.
@@ -18,8 +20,20 @@ public class Game extends Activity {
         snake = new Snake(field.getCenter());
     }
 
+    public Field getField() {
+        return this.field;
+    }
+
+    public Snake getSnake() {
+        return this.snake;
+    }
+
     @Override
     public void update(long delta) {
+        if (Engine.gate().isKeyPressed(KeyEvent.VK_ESCAPE)) {
+            this.closeGame();
+        }
+        field.update(delta);
         snake.update(delta);
     }
 
@@ -28,5 +42,14 @@ public class Game extends Activity {
         this.clearScreen(graphics);
         this.field.render(graphics);
         this.snake.render(graphics);
+    }
+
+    @Override
+    public Dimension getDimension() {
+        return new Dimension(Config.FIELD_WIDTH * Config.CELL_SIZE, Config.FIELD_HEIGHT * Config.CELL_SIZE);
+    }
+
+    public void closeGame() {
+        Engine.gate().setActivity(new Menu());
     }
 }

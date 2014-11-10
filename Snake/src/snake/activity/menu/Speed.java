@@ -5,6 +5,8 @@ import engine.Engine;
 import engine.Menu;
 import snake.Config;
 
+import java.awt.*;
+
 /**
  * Created by Никита on 11/11/2014.
  */
@@ -30,5 +32,10 @@ public class Speed extends Menu {
     public void back() {
         Activity menu = new snake.activity.Menu();
         Engine.gate().setActivity(menu);
+    }
+
+    @Override
+    public Dimension getDimension() {
+        return new Dimension(Config.MENU_WIDTH, Config.MENU_HEIGHT + 100);
     }
 }

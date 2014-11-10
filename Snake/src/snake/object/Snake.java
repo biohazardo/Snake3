@@ -2,6 +2,7 @@ package snake.object;
 
 import engine.Engine;
 import snake.Config;
+import snake.activity.Game;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class Snake {
 
     public void setSpeed(int speed) {
         this.speed = speed;
-        milliBetweenSteps = 1000 / speed;
+        milliBetweenSteps = (1000 / speed) / Config.SPEED_MODIFIER;
     }
 
     private void initFirstLimbs(Point startPoint) {
@@ -59,6 +60,9 @@ public class Snake {
 
         Limb lastLimb = limbs.remove(limbs.size() - 1);
         Limb firstLimb = limbs.get(0);
+
+        Point lastLimbOldPosition = lastLimb.getPosition();
+
         Point firstLimbPosition = firstLimb.getPosition();
         if (direction == 'D') {
             lastLimb.setPosition(new Point((int)firstLimbPosition.getX(), (int)firstLimbPosition.getY() + 1));
@@ -81,6 +85,14 @@ public class Snake {
 
         lastLimb.setHead(true);
         firstLimb.setHead(false);
+
+        Game game = (Game) Engine.gate().getActivity();
+        Point point = lastLimb.getPosition();
+        Fruit fruit = game.getField().getFruit((int)point.getX(), (int)point.getY());
+        if (fruit != null) {
+            game.getField().eatFruit(fruit);
+            this.grow(lastLimbOldPosition);
+        }
 
         lastStep = System.currentTimeMillis();
     }
@@ -107,6 +119,11 @@ public class Snake {
         direction = tempDirection;
     }
 
+    public void grow(Point position) {
+        Limb limb = new Limb(false, position);
+        this.limbs.add(limb);
+    }
+
     protected class Limb {
         private Point position;
         private boolean isHead;
@@ -117,7 +134,7 @@ public class Snake {
         }
 
         public void render(Graphics graphics) {
-            graphics.setColor(isHead ? Color.RED : Color.GREEN);
+            graphics.setColor(isHead ? Color.WHITE : Color.GREEN);
             graphics.fillRect((int) position.getX() * Config.CELL_SIZE, (int) position.getY() * Config.CELL_SIZE, Config.CELL_SIZE, Config.CELL_SIZE);
         }
 
