@@ -15,10 +15,21 @@ import java.awt.event.KeyEvent;
 public class Game extends Activity {
     Field field;
     Snake snake;
+
+    private int score = 0;
+    private static Game instance;
+    public static Game gate() {
+        return Game.instance;
+    }
+
     public Game() {
+        Game.instance = this;
         field = new Field(new Dimension(Config.FIELD_WIDTH, Config.FIELD_HEIGHT));
         snake = new Snake(field.getCenter());
     }
+
+    public int getScore() {return score;}
+    public void addScore(int delta) {this.score += delta;}
 
     public Field getField() {
         return this.field;

@@ -87,8 +87,6 @@ public class Snake {
         lastLimb.setHead(true);
         firstLimb.setHead(false);
 
-        System.out.println(lastLimb.getPosition().getX() + " " + lastLimb.getPosition().getY());
-
         if (lastLimb.outOfBounds()) {
             lastLimb.teleport(direction);
         }
@@ -98,7 +96,7 @@ public class Snake {
         Fruit fruit = game.getField().getFruit((int) point.getX(), (int) point.getY());
         if (fruit != null) {
             game.getField().eatFruit(fruit);
-            this.grow(lastLimbOldPosition);
+            this.grow(lastLimbOldPosition, 1);
         }
         this.notMovedYet = false;
         lastStep = System.currentTimeMillis();
@@ -131,13 +129,14 @@ public class Snake {
         }
     }
 
-    public void grow(Point position) {
+    public void grow(Point position, int howMuch) {
         Limb limb = new Limb(false, position);
         this.limbs.add(limb);
+        Game.gate().addScore(howMuch * Config.SNAKE_SPEED * Config.SNAKE_SPEED);
     }
 
     public Field getField() {
-        Game game = (Game) Engine.gate().getActivity();
+        Game game = Game.gate();
         return game.getField();
     }
 

@@ -1,5 +1,7 @@
 package snake.object;
 
+import snake.object.field.InfoPanel;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -10,14 +12,17 @@ import java.util.Random;
 public class Field {
     public Dimension size;
     private Random generator;
+    public InfoPanel infoPanel;
     protected ArrayList<Fruit> fruits = new ArrayList<Fruit>();
 
     public Field(Dimension size) {
         generator = new Random();
         this.size = size;
+        this.infoPanel = new InfoPanel(this);
     }
 
     public void render(Graphics graphics) {
+        this.infoPanel.render(graphics);
         for (Fruit fruit : fruits) {
             fruit.render(graphics);
         }
