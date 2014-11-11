@@ -3,6 +3,7 @@ package snake.activity;
 import engine.Activity;
 import engine.Engine;
 import snake.*;
+import snake.activity.menu.Level;
 import snake.activity.menu.Speed;
 
 import java.awt.*;
@@ -15,10 +16,11 @@ public class Menu extends engine.Menu {
     protected void init() {
         this.keyReleased = false;
         this.title = "Ultra Snake Game!";
-        this.items = new MenuItem[3];
+        this.items = new MenuItem[4];
         this.items[0] = new MenuItem("Start","startGame");
         this.items[1] = new MenuItem("Speed","changeSpeed");
-        this.items[2] = new MenuItem("Exit","exit");
+        this.items[2] = new MenuItem("Level","changeLevel");
+        this.items[3] = new MenuItem("Exit","exit");
         this.items[0].setSelected(true);
     }
 
@@ -40,6 +42,11 @@ public class Menu extends engine.Menu {
     public void changeSpeed() {
         Activity speed = new Speed();
         Engine.gate().setActivity(speed);
+    }
+
+    public void changeLevel() {
+        Activity level = new Level();
+        Engine.gate().setActivity(level);
     }
 
 

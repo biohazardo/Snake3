@@ -15,6 +15,7 @@ public class Snake {
     private ArrayList<Limb> limbs;
     private Character direction;
     private int speed;
+    private int growAmount = 0;
     private long lastStep;
     private long milliBetweenSteps;
     private boolean notMovedYet = false;
@@ -92,20 +93,38 @@ public class Snake {
             lastLimb.teleport(direction);
         }
 
+        if (this.snakeEatItself(lastLimb)) {
+            Game.gate().gameOver();
+        }
+
         Game game = (Game) Engine.gate().getActivity();
         Point point = lastLimb.getPosition();
         Fruit fruit = game.getField().getFruit((int) point.getX(), (int) point.getY());
         if (fruit != null) {
             game.getField().eatFruit(fruit);
-            this.grow(lastLimbOldPosition, 1);
+            this.growAmount++;
         }
         BigFruit bigFruit = game.getField().getBigFruit((int) point.getX(), (int) point.getY());
         if (bigFruit != null) {
             game.getField().eatBigFruit(bigFruit);
-            this.grow(lastLimbOldPosition, 3);
+            this.growAmount += 3;
+        }
+        if (this.growAmount > 0) {
+            this.grow(lastLimbOldPosition);
         }
         this.notMovedYet = false;
         lastStep = System.currentTimeMillis();
+    }
+
+    private boolean snakeEatItself(Limb lastLimb) {
+        for (Limb limb: limbs) {
+            if (lastLimb == limb || limbs.indexOf(limb) == 0) { continue; }
+            if (limb.getPosition().getX() == lastLimb.getPosition().getX()
+                    && limb.getPosition().getY() == lastLimb.getPosition().getY()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected void changeDirection() {
@@ -135,15 +154,25 @@ public class Snake {
         }
     }
 
-    public void grow(Point position, int howMuch) {
+    public void grow(Point position) {
         Limb limb = new Limb(false, position);
         this.limbs.add(limb);
-        Game.gate().addScore(howMuch * Config.SNAKE_SPEED * Config.SNAKE_SPEED);
+        Game.gate().addScore(Config.SNAKE_SPEED * Config.SNAKE_SPEED);
+        this.growAmount--;
     }
 
     public Field getField() {
         Game game = Game.gate();
         return game.getField();
+    }
+
+    public boolean isFillCell(int x, int y) {
+        for (Limb limb:limbs) {
+            if (limb.getPosition().getX() == x && limb.getPosition().getY() == y) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected class Limb {

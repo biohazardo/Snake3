@@ -36,6 +36,6 @@ public class Speed extends Menu {
 
     @Override
     public Dimension getDimension() {
-        return new Dimension(Config.MENU_WIDTH, Config.MENU_HEIGHT + 100);
+        return new Dimension(Config.MENU_WIDTH, Config.MENU_HEIGHT);
     }
 }

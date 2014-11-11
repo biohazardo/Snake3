@@ -3,6 +3,7 @@ package snake.activity;
 import engine.Activity;
 import engine.Engine;
 import snake.Config;
+import snake.activity.game.GameOverTitle;
 import snake.object.Field;
 import snake.object.Snake;
 
@@ -16,8 +17,11 @@ public class Game extends Activity {
     Field field;
     Snake snake;
 
+    public boolean paused = false;
     private int score = 0;
+    private boolean keyReleased;
     private static Game instance;
+    private GameOverTitle gameOverTitle;
     public static Game gate() {
         return Game.instance;
     }
@@ -41,11 +45,17 @@ public class Game extends Activity {
 
     @Override
     public void update(long delta) {
+
         if (Engine.gate().isKeyPressed(KeyEvent.VK_ESCAPE)) {
             this.closeGame();
+        } else {
+            this.keyReleased = true;
         }
-        field.update(delta);
-        snake.update(delta);
+
+        if (!this.paused) {
+            field.update(delta);
+            snake.update(delta);
+        }
     }
 
     @Override
@@ -53,6 +63,9 @@ public class Game extends Activity {
         this.clearScreen(graphics);
         this.field.render(graphics);
         this.snake.render(graphics);
+        if (this.gameOverTitle != null) {
+            this.gameOverTitle.render(graphics);
+        }
     }
 
     @Override
@@ -62,5 +75,11 @@ public class Game extends Activity {
 
     public void closeGame() {
         Engine.gate().setActivity(new Menu());
+    }
+
+    public void gameOver() {
+        this.paused = true;
+        this.gameOverTitle = new GameOverTitle();
+
     }
 }
