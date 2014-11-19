@@ -33,6 +33,7 @@ public class Engine {
 
     public void setActivity(Activity activity) {
         this.canvas.setPreferredSize(activity.getDimension());
+        this.canvas.setSize(activity.getDimension());
         this.window.pack();
         this.activity = activity;
     }
